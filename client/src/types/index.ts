@@ -1,7 +1,13 @@
 type UserState = {
-  connectionId: string;
   userName: string;
+  roomId: string;
+  canJoinRoom: boolean;
+};
+
+type SocketState = {
+  connected: boolean;
+  connectionId: string;
   connectionDate: number;
 };
 
-export type { UserState };
+export type { UserState, SocketState };

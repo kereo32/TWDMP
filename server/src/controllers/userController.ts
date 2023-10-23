@@ -2,6 +2,7 @@ import { Socket, Server as SocketIOServer } from 'socket.io';
 
 class UserController {
   private io: SocketIOServer;
+  private players = new Map();
 
   constructor(io: SocketIOServer) {
     this.io = io;
@@ -20,9 +21,14 @@ class UserController {
   }
 
   private handleUserConnection(socket: Socket) {
-    console.log('A user connected');
+    socket.on('userJoined', (data) => {
+      const { userName } = data;
 
-    // You can send a welcome message to the newly connected user
+      this.players.set(socket.id, { userName });
+
+      this.io.emit('updatePlayers', Array.from(this.players.values()));
+    });
+
     socket.emit('welcome', 'Welcome to the chat room!');
   }
 
@@ -30,7 +36,9 @@ class UserController {
   private handleUserDisconnection(socket: Socket) {
     console.log('User disconnected');
 
-    // You can perform cleanup tasks, update user status, or notify other users
+    this.players.delete(socket.id);
+
+    this.io.emit('updatePlayers', Array.from(this.players.values()));
   }
 }
 

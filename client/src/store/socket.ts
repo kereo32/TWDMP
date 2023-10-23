@@ -1,26 +1,26 @@
 // socketSlice.ts
-import { createSlice } from '@reduxjs/toolkit';
-import SocketService from '../services/SocketService';
-
-interface SocketState {
-  connected: boolean;
-}
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { SocketState } from '../types';
 
 const initialState: SocketState = {
   connected: false,
+  connectionId: '',
+  connectionDate: new Date().getTime(),
 };
 
 const socketSlice = createSlice({
   name: 'socket',
   initialState,
   reducers: {
-    connectSocket(state) {
-      SocketService.connect('http://localhost:9000');
-      state.connected = true;
+    connectSocket(state: SocketState, action: PayloadAction<SocketState>) {
+      state.connected = action.payload.connected;
+      state.connectionId = action.payload.connectionId;
+      state.connectionDate = action.payload.connectionDate;
     },
-    disconnectSocket(state) {
-      SocketService.disconnect();
+    disconnectSocket(state: SocketState) {
       state.connected = false;
+      state.connectionId = '';
+      state.connectionDate = new Date().getTime();
     },
   },
 });

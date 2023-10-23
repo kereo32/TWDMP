@@ -1,28 +1,43 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserState } from '../types';
+import SocketService from '../services/SocketService';
 
 const initialState: UserState = {
-  connectionId: '',
   userName: '',
-  connectionDate: new Date().getTime(),
+  roomId: '',
+  canJoinRoom: false,
 };
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    connectionSuccess(state: UserState, action: PayloadAction<UserState>) {
-      state.connectionId = action.payload.connectionId;
+    updateUserInformation(state: UserState, action: PayloadAction<UserState>) {
       state.userName = action.payload.userName;
-      state.connectionDate = action.payload.connectionDate;
+
+      SocketService.emit('userJoined', { userName: state.userName });
     },
-    disconnect(state: UserState) {
-      state.connectionId = '';
+    updateUserRoomIdByJoin(state: UserState, action: PayloadAction<string>) {
+      state.roomId = action.payload;
+
+      SocketService.emit('joinRoom', { roomID: state.roomId, userName: state.userName });
+    },
+    updateUserRoomIdByCreate(state: UserState, action: PayloadAction<string>) {
+      state.roomId = action.payload;
+
+      SocketService.emit('createRoom', { roomID: state.roomId, userName: state.userName });
+    },
+    updatePlayerStatus(state: UserState, action: PayloadAction<boolean>) {
+      console.log(action.payload, 'xd');
+      state.canJoinRoom = action.payload;
+    },
+    resetUserInformation(state: UserState) {
       state.userName = '';
-      state.connectionDate = new Date().getTime();
+      state.roomId = '';
+      state.canJoinRoom = false;
     },
   },
 });
 
-export const { connectionSuccess, disconnect } = userSlice.actions;
+export const { updateUserInformation, updateUserRoomIdByJoin, updateUserRoomIdByCreate, updatePlayerStatus, resetUserInformation } = userSlice.actions;
 export default userSlice.reducer;
