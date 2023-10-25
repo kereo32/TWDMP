@@ -17,18 +17,15 @@ const userSlice = createSlice({
 
       SocketService.emit('userJoined', { userName: state.userName });
     },
-    updateUserRoomIdByJoin(state: UserState, action: PayloadAction<string>) {
+    updateUserRoomId(state: UserState, action: PayloadAction<string>) {
       state.roomId = action.payload;
 
       SocketService.emit('joinRoom', { roomID: state.roomId, userName: state.userName });
     },
-    updateUserRoomIdByCreate(state: UserState, action: PayloadAction<string>) {
-      state.roomId = action.payload;
-
-      SocketService.emit('createRoom', { roomID: state.roomId, userName: state.userName });
-    },
     updatePlayerStatus(state: UserState, action: PayloadAction<boolean>) {
-      console.log(action.payload, 'xd');
+      console.log(action.payload, 'gameReady worked');
+
+      console.log(state.userName);
       state.canJoinRoom = action.payload;
     },
     resetUserInformation(state: UserState) {
@@ -39,5 +36,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { updateUserInformation, updateUserRoomIdByJoin, updateUserRoomIdByCreate, updatePlayerStatus, resetUserInformation } = userSlice.actions;
+export const { updateUserInformation, updateUserRoomId, updatePlayerStatus, resetUserInformation } = userSlice.actions;
 export default userSlice.reducer;

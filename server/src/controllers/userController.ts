@@ -1,5 +1,5 @@
 import { Socket, Server as SocketIOServer } from 'socket.io';
-
+//bunu basecontrollera çevir, oradan da usercontrollera extend et
 class UserController {
   private io: SocketIOServer;
   private players = new Map();
@@ -21,6 +21,8 @@ class UserController {
   }
 
   private handleUserConnection(socket: Socket) {
+    console.log('User connected');
+
     socket.on('userJoined', (data) => {
       const { userName } = data;
 

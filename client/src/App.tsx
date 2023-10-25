@@ -9,7 +9,7 @@ import Connecting from './Components/Connecting';
 import Game from './Components/Game';
 
 function App() {
-  const isConnected = useSelector((state: SocketState) => state.socket.connected);
+  const isConnected = useSelector((state: SocketState) => state?.socket?.connected);
   useLayoutEffect(() => {
     SocketService.connect('http://localhost:9000');
 

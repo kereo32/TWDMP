@@ -1,7 +1,7 @@
 import { MenuContainer, StyledContainer, StyledTextField, StyledButton, StyledButtonContainer } from './styled';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUserInformation, updateUserRoomIdByCreate, updateUserRoomIdByJoin } from '../store/user';
+import { updateUserInformation, updateUserRoomId } from '../store/user';
 import { CircularProgress } from '@mui/material';
 import { UserState } from '../types';
 
@@ -11,34 +11,30 @@ export default function Menu() {
   const [player, setPlayer] = useState<string>('');
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [room, setRoom] = useState<string>('');
 
   const navigate = useNavigate();
-
-  const [room, setRoom] = useState<string>('');
 
   const dispatch = useDispatch();
   const userName = useSelector((state: UserState) => state.user.userName);
   const canUserJoinRoom = useSelector((state: UserState) => state.user.canJoinRoom);
+  const user = useSelector((state: UserState) => state.user);
 
   useEffect(() => {
     player.length > 4 ? setButtonDisabled(false) : setButtonDisabled(true);
   }, [player]);
 
   useEffect(() => {
-    console.log(canUserJoinRoom);
+    console.log(user, 'user from useEffect');
     canUserJoinRoom && navigate('/game');
-  }, [canUserJoinRoom]);
+  }, [user, canUserJoinRoom]);
 
   const savePlayerName = () => () => {
     dispatch(updateUserInformation({ userName: player }));
   };
 
-  const joinRoom = () => {
-    dispatch(updateUserRoomIdByJoin(room));
-    setIsLoading(true);
-  };
-  const createRoom = () => {
-    dispatch(updateUserRoomIdByCreate(room));
+  const joinRoomOrCreateRoom = () => {
+    dispatch(updateUserRoomId(room));
     setIsLoading(true);
   };
 
@@ -65,10 +61,10 @@ export default function Menu() {
                   variant="outlined"
                 />
                 <StyledButtonContainer>
-                  <StyledButton onClick={joinRoom} disabled={buttonDisabled} variant="contained">
+                  <StyledButton onClick={joinRoomOrCreateRoom} disabled={buttonDisabled} variant="contained">
                     Join
                   </StyledButton>
-                  <StyledButton onClick={createRoom} disabled={buttonDisabled} variant="contained">
+                  <StyledButton onClick={joinRoomOrCreateRoom} disabled={buttonDisabled} variant="contained">
                     Create
                   </StyledButton>
                 </StyledButtonContainer>

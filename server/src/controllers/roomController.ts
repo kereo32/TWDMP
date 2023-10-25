@@ -9,7 +9,6 @@ class RoomController {
 
     this.io.on('connection', (socket) => {
       socket.on('joinRoom', (data: { roomID: string; userName: string }) => {
-        console.log('joined');
         this.createOrJoinRoom(socket, data);
       });
 
@@ -21,7 +20,6 @@ class RoomController {
 
   createOrJoinRoom(socket: Socket, data: { roomID: string; userName: string }) {
     const { roomID, userName } = data;
-    console.log(roomID, userName);
 
     if (!this.rooms.has(roomID)) {
       this.rooms.set(roomID, { users: [userName] });
@@ -29,18 +27,18 @@ class RoomController {
       socket.emit('roomCreated', { roomID });
     } else {
       const room = this.rooms.get(roomID);
-      console.log(room);
       if (room && room.users.length < 2) {
         room.users.push(userName);
         socket.join(roomID);
         socket.emit('roomJoined', { roomID });
         const users = room.users;
-        console.log(users, 'us');
-        users.length > 1 && socket.to(roomID).emit('gameReady', { roomID, users });
+        users.length > 1 && this.io.to(roomID).emit('gameReady', { roomID, users });
+        console.log('gameready worked', users);
       } else {
         const room = this.rooms.get(roomID);
         const users = room?.users;
         socket.to(roomID).emit('roomFull', { roomID, users });
+        console.log('roomfull');
       }
     }
   }

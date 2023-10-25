@@ -21,8 +21,7 @@ class SocketService {
     });
 
     this.socket.on('gameReady', (data) => {
-      console.log('ok');
-      console.log(data);
+      console.log(data, 'gameReady');
       store.dispatch(updatePlayerStatus(true));
     });
   }
@@ -40,6 +39,7 @@ class SocketService {
 
   on(event: string, callback: () => void): void {
     if (this.socket) {
+      console.log(event);
       this.socket.on(event, callback);
     }
   }
