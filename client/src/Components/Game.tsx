@@ -6,6 +6,7 @@ export default function Game() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const room = useSelector((state) => state.room);
+
   const [players, setPlayers] = useState([
     { name: '', gold: 0, playerTurn: false },
     { name: '', gold: 0, playerTurn: false },
@@ -25,7 +26,10 @@ export default function Game() {
     ]);
   }, [user, room]);
 
-  const handleRoll = (e) => {
+  useEffect(() => {
+    isGameOver();
+  }, [roll]);
+  const handleRoll = (e: Event) => {
     e.preventDefault();
     if (!isRolling) {
       setIsRolling(true);
@@ -46,6 +50,23 @@ export default function Game() {
       setTimeout(() => {
         setIsRolling(false);
       }, 2000);
+    }
+  };
+
+  const isGameOver = (): void => {
+    if (roll === 1) {
+      if (players[0].playerTurn) {
+        setPlayers([
+          { ...players[0], gold: players[0].gold + 100 },
+          { ...players[1], gold: players[1].gold - 100 },
+        ]);
+      } else {
+        setPlayers([
+          { ...players[0], gold: players[0].gold - 100 },
+          { ...players[1], gold: players[1].gold + 100 },
+        ]);
+      }
+      setRoll(100);
     }
   };
 
