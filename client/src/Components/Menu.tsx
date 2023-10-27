@@ -25,7 +25,6 @@ export default function Menu() {
   }, [player]);
 
   useEffect(() => {
-    console.log(user, 'user from useEffect');
     canUserJoinRoom && navigate('/game');
   }, [user, canUserJoinRoom]);
 

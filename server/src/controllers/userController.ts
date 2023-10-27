@@ -34,7 +34,6 @@ class UserController {
     socket.emit('welcome', 'Welcome to the chat room!');
   }
 
-  // Method to handle user disconnections
   private handleUserDisconnection(socket: Socket) {
     console.log('User disconnected');
 

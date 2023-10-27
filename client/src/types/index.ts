@@ -10,4 +10,9 @@ type SocketState = {
   connectionDate: number;
 };
 
-export type { UserState, SocketState };
+type RoomState = {
+  roomID: string;
+  users: UserState[];
+};
+
+export type { UserState, SocketState, RoomState };

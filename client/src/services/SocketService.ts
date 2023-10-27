@@ -2,6 +2,7 @@
 import { io, Socket } from 'socket.io-client';
 import { connectSocket, disconnectSocket } from '../store/socket';
 import { updatePlayerStatus, resetUserInformation } from '../store/user';
+import { updateRoom } from '../store/room';
 import store from '../store/store';
 
 class SocketService {
@@ -23,6 +24,7 @@ class SocketService {
     this.socket.on('gameReady', (data) => {
       console.log(data, 'gameReady');
       store.dispatch(updatePlayerStatus(true));
+      store.dispatch(updateRoom(data));
     });
   }
 

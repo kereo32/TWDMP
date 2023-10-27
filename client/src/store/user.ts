@@ -23,9 +23,6 @@ const userSlice = createSlice({
       SocketService.emit('joinRoom', { roomID: state.roomId, userName: state.userName });
     },
     updatePlayerStatus(state: UserState, action: PayloadAction<boolean>) {
-      console.log(action.payload, 'gameReady worked');
-
-      console.log(state.userName);
       state.canJoinRoom = action.payload;
     },
     resetUserInformation(state: UserState) {
