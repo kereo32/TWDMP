@@ -1,20 +1,22 @@
 import { Socket, Server as SocketIOServer } from 'socket.io';
+import BaseController from './baseController';
 
-class RoomController {
-  private io: SocketIOServer;
-  private rooms: Map<string, { users: string[] }> = new Map();
+class RoomController extends BaseController {
+  private rooms: Map<string, { users: { socketId: string; userName: string }[] }> = new Map();
 
-  constructor(io: SocketIOServer) {
-    this.io = io;
+  constructor(server: SocketIOServer) {
+    super(server);
+  }
 
-    this.io.on('connection', (socket) => {
-      socket.on('joinRoom', (data: { roomID: string; userName: string }) => {
-        this.createOrJoinRoom(socket, data);
-      });
+  handleUserConnection(socket: Socket) {
+    super.handleUserConnection(socket);
 
-      socket.on('createRoom', (data: { roomID: string; userName: string }) => {
-        this.createOrJoinRoom(socket, data);
-      });
+    socket.on('joinRoom', (data: { roomID: string; userName: string }) => {
+      this.createOrJoinRoom(socket, data);
+    });
+
+    socket.on('createRoom', (data: { roomID: string; userName: string }) => {
+      this.createOrJoinRoom(socket, data);
     });
   }
 
@@ -22,35 +24,41 @@ class RoomController {
     const { roomID, userName } = data;
 
     if (!this.rooms.has(roomID)) {
-      this.rooms.set(roomID, { users: [userName] });
+      this.rooms.set(roomID, { users: [{ socketId: socket.id, userName }] });
       socket.join(roomID);
       socket.emit('roomCreated', { roomID });
     } else {
       const room = this.rooms.get(roomID);
       if (room && room.users.length < 2) {
-        room.users.push(userName);
+        room.users.push({ socketId: socket.id, userName });
         socket.join(roomID);
         socket.emit('roomJoined', { roomID });
-        const users = room.users;
-        users.length > 1 && this.io.to(roomID).emit('gameReady', { roomID, users });
-        console.log('gameready worked', users);
+        const users = room.users.map((user) => user.userName);
+        if (users.length === 2) {
+          this.io.to(roomID).emit('gameReady', { roomID, users });
+          console.log('gameready worked', users);
+        }
       } else {
-        const room = this.rooms.get(roomID);
-        const users = room?.users;
-        socket.to(roomID).emit('roomFull', { roomID, users });
+        socket.to(roomID).emit('roomFull', { roomID });
         console.log('roomfull');
       }
     }
   }
 
   handleUserDisconnection(socket: Socket) {
+    super.handleUserDisconnection(socket);
+    console.log(this.rooms, 'rooms');
+
     const roomsToLeave: string[] = [];
 
     this.rooms.forEach((room, roomID) => {
       const { users } = room;
-      const index = users.indexOf(socket.id);
-      if (index !== -1) {
-        users.splice(index, 1);
+
+      const userIndex = users.findIndex((user) => user.socketId === socket.id);
+
+      if (userIndex !== -1) {
+        users.splice(userIndex, 1);
+
         if (users.length === 0) {
           roomsToLeave.push(roomID);
         }
@@ -58,9 +66,10 @@ class RoomController {
     });
 
     roomsToLeave.forEach((roomID) => {
-      this.rooms.delete(roomID);
       this.io.to(roomID).emit('roomClosed', { roomID });
+      this.rooms.delete(roomID);
     });
+    console.log(this.rooms, 'rooms');
   }
 }
 
