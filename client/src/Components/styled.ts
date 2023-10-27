@@ -1,7 +1,7 @@
-import { Container, TextField, Button } from '@mui/material';
+import { Container, TextField, Button, InputLabel } from '@mui/material';
 import { styled } from '@mui/system';
 
-const MenuContainer = styled('div')({
+const GenericContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -9,6 +9,11 @@ const MenuContainer = styled('div')({
   height: '100%',
   width: '100%',
   backgroundColor: '#493548',
+});
+
+const StyledInputLabel = styled(InputLabel)({
+  backgroundColor: '#4B4E6D',
+  color: '#FFFFFF',
 });
 const StyledContainer = styled(Container)({
   display: 'flex',
@@ -20,6 +25,45 @@ const StyledContainer = styled(Container)({
   borderRadius: '10px',
   boxShadow: '0px 0px 3px 0px #6A8D92',
   backgroundColor: '#4B4E6D',
+});
+
+const StyledPlayerContainer = styled(StyledContainer)({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '50%',
+  width: '25%',
+  boxShadow: '0px 0px 3px 0px #6A8D92',
+  backgroundColor: '#4B4E6D',
+  margin: 0,
+  padding: 0,
+});
+
+const StyledRowContainer = styled(Container)({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  height: '50%',
+  width: '100%',
+  borderRadius: '10px',
+  boxShadow: '0px 0px 3px 0px #6A8D92',
+  backgroundColor: '#4B4E6D',
+});
+
+const StyledPlayerCard = styled(Container)({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '50%',
+  width: '25%',
+  borderRadius: '10px',
+  boxShadow: '0px 0px 3px 0px #6A8D92',
+  backgroundColor: '#4B4E6D',
+  margin: 0,
+  padding: 0,
 });
 
 const StyledTextField = styled(TextField)({
@@ -47,4 +91,14 @@ const StyledButtonContainer = styled('div')({
   marginTop: '10px',
 });
 
-export { MenuContainer, StyledContainer, StyledTextField, StyledButton, StyledButtonContainer };
+export {
+  GenericContainer,
+  StyledPlayerContainer,
+  StyledInputLabel,
+  StyledRowContainer,
+  StyledContainer,
+  StyledPlayerCard,
+  StyledTextField,
+  StyledButton,
+  StyledButtonContainer,
+};

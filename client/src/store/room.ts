@@ -12,7 +12,6 @@ const roomSlice = createSlice({
   initialState,
   reducers: {
     updateRoom(state: RoomState, action: PayloadAction<RoomState>) {
-      console.log(action.payload, 'updateRoom');
       state.roomID = action.payload.roomID;
       state.users = action.payload.users;
     },

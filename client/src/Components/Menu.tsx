@@ -1,4 +1,4 @@
-import { MenuContainer, StyledContainer, StyledTextField, StyledButton, StyledButtonContainer } from './styled';
+import { GenericContainer, StyledContainer, StyledTextField, StyledButton, StyledButtonContainer } from './styled';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserInformation, updateUserRoomId } from '../store/user';
@@ -39,7 +39,7 @@ export default function Menu() {
 
   return (
     <>
-      <MenuContainer>
+      <GenericContainer>
         {userName ? (
           isLoading ? (
             <>
@@ -86,7 +86,7 @@ export default function Menu() {
             </StyledButton>
           </StyledContainer>
         )}
-      </MenuContainer>
+      </GenericContainer>
     </>
   );
 }
