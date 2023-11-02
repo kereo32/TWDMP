@@ -1,16 +1,27 @@
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { resetRollHistory } from '../store/room';
 import BetModal from './BetModal';
 import SocketService from '../services/SocketService';
 import Timer from './Timer';
-import { GenericContainer, StyledPlayerContainer, StyledInputLabel, StyledButton, StyledRowContainer, StyledContainer, StyledPlayerCard } from './styled';
+import {
+  GenericContainer,
+  StyledPlayerContainer,
+  StyledInputLabel,
+  StyledButton,
+  StyledRowContainer,
+  StyledRollHistoryContainer,
+  StyledContainer,
+  StyledPlayerCard,
+} from './styled';
 export default function Game() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const room = useSelector((state) => state.room);
 
-  const { players, currentBet, gameState } = room;
+  const { players, currentBet, gameState, rollHistory } = room;
 
   const [open, setOpen] = useState(true);
   const [activePlayer, setActivePlayer] = useState('');
@@ -35,6 +46,7 @@ export default function Game() {
     if (gameState === 'GAME_READY') {
       SocketService.emit('updateRoll', { roomID: room.roomID, roll: currentBet });
       SocketService.emit('updatePlayerTurn', { roomID: room.roomID, playerIndex: 0, playerTurn: true });
+      dispatch(resetRollHistory());
       setOpen(false);
     } else if (gameState === 'GAME_BET') {
       setOpen(true);
@@ -88,6 +100,17 @@ export default function Game() {
     <>
       <GenericContainer>
         <BetModal open={open} setOpen={setOpen} roomID={room.roomID} userName={user.userName} />
+        <StyledRollHistoryContainer>
+          {room.isRolling ? (
+            'Rolling...'
+          ) : (
+            <>
+              {rollHistory.map((roll, index) => {
+                return `${roll} -> `;
+              })}
+            </>
+          )}
+        </StyledRollHistoryContainer>
         <StyledRowContainer>
           <StyledPlayerContainer>
             {players[0].playerTurn && !room.isRolling && gameState === 'GAME_READY' ? (

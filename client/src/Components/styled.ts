@@ -66,6 +66,19 @@ const StyledPlayerCard = styled(Container)({
   padding: 0,
 });
 
+const StyledRollHistoryContainer = styled(Container)({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'start',
+  height: '5%',
+  width: '100%',
+  borderRadius: '5px',
+  backgroundColor: '#d0d5db',
+  margin: 0,
+  padding: 0,
+});
+
 const StyledTextField = styled(TextField)({
   display: 'flex',
   flexDirection: 'column',
@@ -101,4 +114,5 @@ export {
   StyledTextField,
   StyledButton,
   StyledButtonContainer,
+  StyledRollHistoryContainer,
 };

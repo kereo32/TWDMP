@@ -17,6 +17,7 @@ type RoomState = {
   currentBet: number;
   isRolling: boolean;
   roll: number;
+  rollHistory: number[];
 };
 
 export type { UserState, SocketState, RoomState };

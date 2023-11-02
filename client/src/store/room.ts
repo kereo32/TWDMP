@@ -9,6 +9,7 @@ const initialState: RoomState = {
   currentBet: 0,
   isRolling: false,
   roll: 0,
+  rollHistory: [],
 };
 
 const roomSlice = createSlice({
@@ -43,6 +44,10 @@ const roomSlice = createSlice({
     },
     updateRoll(state: RoomState, action: PayloadAction<number>) {
       state.roll = action.payload;
+      state.rollHistory.push(action.payload);
+    },
+    resetRollHistory(state: RoomState) {
+      state.rollHistory = [];
     },
   },
 });
@@ -56,5 +61,6 @@ export const {
   updatePlayerReadyStatus,
   updateRollingState,
   updateRoll,
+  resetRollHistory,
 } = roomSlice.actions;
 export default roomSlice.reducer;
