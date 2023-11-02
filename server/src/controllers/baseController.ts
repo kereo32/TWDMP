@@ -18,18 +18,10 @@ class BaseController {
   protected handleUserConnection(socket: Socket) {
     console.log('User connected');
 
-    socket.on('userJoined', (data) => {
-      const { userName } = data;
-      this.players.set(socket.id, { userName });
-      this.io.emit('updatePlayers', Array.from(this.players.values()));
-    });
-
     socket.emit('welcome', 'Welcome to the chat room!');
   }
 
   protected handleUserDisconnection(socket: Socket) {
-    this.players.delete(socket.id);
-
     this.io.emit('updatePlayers', Array.from(this.players.values()));
   }
 }

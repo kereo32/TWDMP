@@ -12,7 +12,11 @@ type SocketState = {
 
 type RoomState = {
   roomID: string;
-  users: UserState[];
+  players: { name: string; gold: number; playerTurn: boolean; playerReady: boolean }[];
+  gameState: string;
+  currentBet: number;
+  isRolling: boolean;
+  roll: number;
 };
 
 export type { UserState, SocketState, RoomState };
