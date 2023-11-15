@@ -2,7 +2,7 @@ import { useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import SocketService from './services/SocketService';
 import { SocketState } from './types/index';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Menu from './Components/Menu';
 import Connecting from './Components/Connecting';
@@ -23,6 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={isConnected ? <Menu /> : <Connecting />} />
         <Route path="/game" element={<Game />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>
   );

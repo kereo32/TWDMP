@@ -6,6 +6,7 @@ const initialState: UserState = {
   userName: '',
   roomId: '',
   canJoinRoom: false,
+  errorMessage: '',
 };
 
 const userSlice = createSlice({
@@ -26,12 +27,18 @@ const userSlice = createSlice({
       state.canJoinRoom = action.payload;
     },
     resetUserInformation(state: UserState) {
-      state.userName = '';
       state.roomId = '';
       state.canJoinRoom = false;
+    },
+    updateErrorMessage(state: UserState, action: PayloadAction<string>) {
+      if (action.payload) {
+        state.errorMessage = `${action.payload} Room Is full! Please try another one.`;
+      } else {
+        state.errorMessage = '';
+      }
     },
   },
 });
 
-export const { updateUserInformation, updateUserRoomId, updatePlayerStatus, resetUserInformation } = userSlice.actions;
+export const { updateUserInformation, updateUserRoomId, updatePlayerStatus, resetUserInformation, updateErrorMessage } = userSlice.actions;
 export default userSlice.reducer;

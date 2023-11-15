@@ -2,6 +2,7 @@ type UserState = {
   userName: string;
   roomId: string;
   canJoinRoom: boolean;
+  errorMessage: string;
 };
 
 type SocketState = {
@@ -18,6 +19,8 @@ type RoomState = {
   isRolling: boolean;
   roll: number;
   rollHistory: number[];
+  messages: { name: string; message: string }[];
+  isFull: boolean;
 };
 
 export type { UserState, SocketState, RoomState };

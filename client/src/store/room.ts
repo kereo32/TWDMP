@@ -10,6 +10,8 @@ const initialState: RoomState = {
   isRolling: false,
   roll: 0,
   rollHistory: [],
+  messages: [],
+  isFull: false,
 };
 
 const roomSlice = createSlice({
@@ -23,6 +25,7 @@ const roomSlice = createSlice({
       state.currentBet = action.payload.currentBet;
       state.isRolling = action.payload.isRolling;
       state.roll = action.payload.roll;
+      state.isFull = true;
     },
     updatePlayerGold(state: RoomState, action: PayloadAction<{ name: string; gold: number; playerTurn: boolean; playerReady: boolean }[]>) {
       state.players = action.payload;
@@ -49,6 +52,9 @@ const roomSlice = createSlice({
     resetRollHistory(state: RoomState) {
       state.rollHistory = [];
     },
+    updateChat(state: RoomState, action: PayloadAction<{ name: string; message: string }[]>) {
+      state.messages = action.payload;
+    },
   },
 });
 
@@ -62,5 +68,6 @@ export const {
   updateRollingState,
   updateRoll,
   resetRollHistory,
+  updateChat,
 } = roomSlice.actions;
 export default roomSlice.reducer;

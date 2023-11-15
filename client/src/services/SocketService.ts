@@ -1,8 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { io, Socket } from 'socket.io-client';
 import { connectSocket, disconnectSocket } from '../store/socket';
-import { updatePlayerStatus, resetUserInformation } from '../store/user';
-import { updatePlayerGold, updatePlayerTurn, updateGameState, updateCurrentBet, updatePlayerReadyStatus, updateRollingState, updateRoll } from '../store/room';
+import { updatePlayerStatus, resetUserInformation, updateErrorMessage } from '../store/user';
+import {
+  updatePlayerGold,
+  updatePlayerTurn,
+  updateGameState,
+  updateCurrentBet,
+  updatePlayerReadyStatus,
+  updateRollingState,
+  updateRoll,
+  updateChat,
+} from '../store/room';
 import { initializeRoom } from '../store/room';
 import store from '../store/store';
 
@@ -25,6 +34,10 @@ class SocketService {
     this.socket.on('gameReady', (data) => {
       store.dispatch(updatePlayerStatus(true));
       store.dispatch(initializeRoom(data));
+    });
+
+    this.socket.on('chat message', (data) => {
+      store.dispatch(updateChat(data));
     });
 
     this.socket.on('updatePlayerGold', (data) => {
@@ -51,6 +64,11 @@ class SocketService {
     this.socket.on('updateRoll', (data) => {
       store.dispatch(updateRoll(data));
     });
+    this.socket.on('roomFull', (data) => {
+      console.log('data', data);
+      store.dispatch(resetUserInformation());
+      store.dispatch(updateErrorMessage(data.roomID));
+    });
   }
 
   disconnect(): void {
@@ -59,7 +77,6 @@ class SocketService {
 
       this.socket.on('disconnect', () => {
         store.dispatch(disconnectSocket());
-        store.dispatch(resetUserInformation());
       });
     }
   }

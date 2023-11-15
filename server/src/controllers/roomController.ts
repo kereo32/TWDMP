@@ -3,6 +3,7 @@ import BaseController from './baseController';
 
 class RoomController extends BaseController {
   private rooms: Map<string, { users: { socketId: string; userName: string }[]; gameState: string; currentBet: number }> = new Map();
+  private messages = new Map<string, { userName: string; message: string }[]>();
 
   constructor(server: SocketIOServer) {
     super(server);
@@ -88,6 +89,17 @@ class RoomController extends BaseController {
         this.io.to(roomID).emit('updateRoll', roll);
       }
     });
+    socket.on('chat message', (data: { roomID: string; userName: string; message: string }) => {
+      const { roomID, userName, message } = data;
+      const room = this.rooms.get(roomID);
+
+      if (room) {
+        const messages = this.messages.get(roomID) || [];
+        messages.push({ userName, message });
+        this.messages.set(roomID, messages);
+        this.io.to(roomID).emit('chat message', messages);
+      }
+    });
   }
 
   createOrJoinRoom(socket: Socket, data: { roomID: string; userName: string }) {
@@ -120,8 +132,7 @@ class RoomController extends BaseController {
             .emit('gameReady', { roomID, players: this.players.get(roomID), gameState: 'GAME_BET', currentBet: 100, isRolling: false, roll: 0 });
         }
       } else {
-        socket.to(roomID).emit('roomFull', { roomID });
-        console.log('roomfull');
+        socket.emit('roomFull', { roomID });
       }
     }
   }

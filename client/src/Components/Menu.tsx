@@ -1,7 +1,15 @@
-import { GenericContainer, StyledContainer, StyledTextField, StyledButton, StyledButtonContainer } from './styled';
+import {
+  GenericContainer,
+  StyledLoginButton,
+  StyledLoginTextField,
+  StyledLoginInputLabel,
+  StyledButton,
+  StyledButtonContainer,
+  StyledLoginContainer,
+} from './styled';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUserInformation, updateUserRoomId } from '../store/user';
+import { updateErrorMessage, updateUserInformation, updateUserRoomId } from '../store/user';
 import { CircularProgress } from '@mui/material';
 import { UserState } from '../types';
 
@@ -33,58 +41,89 @@ export default function Menu() {
   };
 
   const joinRoomOrCreateRoom = () => {
-    dispatch(updateUserRoomId(room));
-    setIsLoading(true);
+    if (!user.errorMessage) {
+      dispatch(updateUserRoomId(room));
+      setIsLoading(true);
+    } else {
+      dispatch(updateErrorMessage(''));
+      dispatch(updateUserRoomId(room));
+    }
   };
 
   return (
     <>
       <GenericContainer>
         {userName ? (
-          isLoading ? (
+          isLoading && !user.errorMessage ? (
             <>
               <h1>Waiting for other players</h1>
               <CircularProgress />
             </>
           ) : (
             <>
-              <StyledContainer>
-                <h1>{player}</h1>
-                <StyledTextField
+              <StyledLoginContainer>
+                <h1>{'Welcome ' + player + '!'}</h1>
+                <StyledLoginInputLabel htmlFor="outlined-basic">Room ID</StyledLoginInputLabel>
+                <StyledLoginTextField
                   required
                   id="outlined-basic"
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setRoom(event.target.value);
                   }}
-                  label="Room"
-                  variant="outlined"
+                  size="small"
+                  sx={{
+                    '& fieldset': { border: 'none' },
+                    input: { color: 'white' },
+                    width: '30%',
+                  }}
                 />
-                <StyledButtonContainer>
-                  <StyledButton onClick={joinRoomOrCreateRoom} disabled={buttonDisabled} variant="contained">
-                    Join
-                  </StyledButton>
-                  <StyledButton onClick={joinRoomOrCreateRoom} disabled={buttonDisabled} variant="contained">
-                    Create
-                  </StyledButton>
-                </StyledButtonContainer>
-              </StyledContainer>
+                <StyledLoginButton
+                  onClick={joinRoomOrCreateRoom}
+                  sx={{
+                    ml: 1,
+                    '&.MuiButtonBase-root:hover': {
+                      bgcolor: '#6c0000',
+                    },
+                  }}
+                  disabled={buttonDisabled}
+                  variant="contained"
+                >
+                  Join
+                </StyledLoginButton>
+                <p>{user.errorMessage}</p>
+              </StyledLoginContainer>
             </>
           )
         ) : (
-          <StyledContainer>
-            <StyledTextField
+          <StyledLoginContainer>
+            <StyledLoginInputLabel htmlFor="outlined-basic">Username</StyledLoginInputLabel>
+            <StyledLoginTextField
               required
               id="outlined-basic"
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setPlayer(event.target.value);
               }}
-              label="Player"
-              variant="outlined"
+              size="small"
+              sx={{
+                '& fieldset': { border: 'none' },
+                input: { color: 'white' },
+                width: '30%',
+              }}
             />
-            <StyledButton onClick={savePlayerName()} disabled={buttonDisabled} variant="contained">
+            <StyledLoginButton
+              onClick={savePlayerName()}
+              sx={{
+                ml: 1,
+                '&.MuiButtonBase-root:hover': {
+                  bgcolor: '#6c0000',
+                },
+              }}
+              disabled={buttonDisabled}
+              variant="contained"
+            >
               Next
-            </StyledButton>
-          </StyledContainer>
+            </StyledLoginButton>
+          </StyledLoginContainer>
         )}
       </GenericContainer>
     </>

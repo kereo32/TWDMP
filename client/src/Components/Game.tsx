@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { resetRollHistory } from '../store/room';
@@ -11,15 +11,23 @@ import {
   StyledInputLabel,
   StyledButton,
   StyledRowContainer,
+  StyledChatContainer,
   StyledRollHistoryContainer,
   StyledContainer,
   StyledPlayerCard,
+  StyledChatTextInput,
+  StyledMessagesContainer,
+  ChatMessage,
+  MessageContent,
+  MessageOwner,
 } from './styled';
+
 export default function Game() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const room = useSelector((state) => state.room);
+  const messages = useSelector((state) => state.room.messages);
 
   const { players, currentBet, gameState, rollHistory } = room;
 
@@ -96,7 +104,13 @@ export default function Game() {
     SocketService.emit('updateGameState', { roomID: room.roomID, gameState: 'GAME_BET' });
   };
 
-  return (
+  const handleChatMessage = (e): void => {
+    e.preventDefault();
+    SocketService.emit('chat message', { roomID: room.roomID, userName: user.userName, message: e.currentTarget[0].value });
+    e.currentTarget[0].value = '';
+  };
+
+  return user.canJoinRoom ? (
     <>
       <GenericContainer>
         <BetModal open={open} setOpen={setOpen} roomID={room.roomID} userName={user.userName} />
@@ -169,8 +183,34 @@ export default function Game() {
               </StyledContainer>
             </StyledPlayerCard>
           </StyledPlayerContainer>
+          <StyledMessagesContainer>
+            {messages
+              .slice()
+              .reverse()
+              .map((message, index) => {
+                return (
+                  <ChatMessage key={index}>
+                    <MessageOwner>{message.userName}</MessageOwner>
+                    <MessageContent>{message.message}</MessageContent>
+                  </ChatMessage>
+                );
+              })}
+          </StyledMessagesContainer>
         </StyledRowContainer>
+
+        <StyledChatContainer>
+          <h1>Chat</h1>
+          <form
+            onSubmit={(e) => {
+              handleChatMessage(e);
+            }}
+          >
+            <StyledChatTextInput />
+          </form>
+        </StyledChatContainer>
       </GenericContainer>
     </>
+  ) : (
+    <></>
   );
 }

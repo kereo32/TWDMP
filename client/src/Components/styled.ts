@@ -1,6 +1,7 @@
-import { Container, TextField, Button, InputLabel } from '@mui/material';
+import { Container, TextField, Button, InputLabel, Box } from '@mui/material';
 import { styled } from '@mui/system';
-
+import wowBackgroundImage from '../../public/images/wowbg.jpeg';
+// InputLabel, TextField, Button
 const GenericContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
@@ -8,7 +9,49 @@ const GenericContainer = styled('div')({
   alignItems: 'center',
   height: '100%',
   width: '100%',
-  backgroundColor: '#493548',
+  backgroundImage: `url(${wowBackgroundImage})`,
+  backgroundSize: 'cover',
+});
+
+const StyledLoginContainer = styled(Container)({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '50%',
+  width: '50%',
+  backgroundColor: 'transparent',
+});
+
+const StyledLoginTextField = styled(TextField)({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'start',
+  alignItems: 'start',
+  backgroundColor: '#101010',
+  borderColor: 'orange',
+  borderRadius: '5px',
+  boxShadow: '0px 0px 20px 5px #3d3b3b',
+});
+
+const StyledLoginInputLabel = styled(InputLabel)({
+  color: '#9b7c49',
+  fontSize: '1.5rem',
+  filter: 'brightness(2)',
+});
+
+const StyledLoginButton = styled(Button)({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: '50px',
+  backgroundColor: '#710000',
+  height: '5%',
+  width: '20%',
+  hover: {
+    backgroundColor: '#710000',
+  },
 });
 
 const StyledInputLabel = styled(InputLabel)({
@@ -79,6 +122,26 @@ const StyledRollHistoryContainer = styled(Container)({
   padding: 0,
 });
 
+const StyledChatContainer = styled(Container)({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '20%',
+  width: '100%',
+  backgroundColor: '#FFF',
+  margin: 0,
+  padding: 0,
+});
+
+const StyledMessagesContainer = styled(Container)({
+  display: 'flex',
+  flexDirection: 'column',
+  maxHeight: '100%',
+  flex: 0.5,
+  overflow: 'auto',
+});
+
 const StyledTextField = styled(TextField)({
   display: 'flex',
   flexDirection: 'column',
@@ -93,6 +156,36 @@ const StyledButton = styled(Button)({
   alignItems: 'center',
   backgroundColor: '#4B4E6D',
   marginTop: '10px',
+});
+
+const StyledChatTextInput = styled(TextField)({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '#FFF',
+  marginTop: '10px',
+  width: '100%',
+});
+const ChatMessage = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  overflow: 'auto',
+  backgroundColor: '#FFFFFF',
+  padding: '8px 12px',
+  borderRadius: '5px',
+  margin: '4px 0',
+  width: '100%',
+  minHeight: '50px',
+});
+
+const MessageOwner = styled('span')({
+  fontWeight: 'bold',
+  marginRight: '8px',
+});
+
+const MessageContent = styled('p')({
+  margin: 0,
 });
 
 const StyledButtonContainer = styled('div')({
@@ -115,4 +208,14 @@ export {
   StyledButton,
   StyledButtonContainer,
   StyledRollHistoryContainer,
+  StyledChatContainer,
+  StyledChatTextInput,
+  StyledMessagesContainer,
+  ChatMessage,
+  MessageOwner,
+  MessageContent,
+  StyledLoginContainer,
+  StyledLoginTextField,
+  StyledLoginInputLabel,
+  StyledLoginButton,
 };
