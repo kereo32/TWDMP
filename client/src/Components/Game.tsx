@@ -20,6 +20,9 @@ import {
   ChatMessage,
   MessageContent,
   MessageOwner,
+  StyledTextMessage,
+  StyledHeader,
+  StyledBetButton,
 } from './styled';
 
 export default function Game() {
@@ -116,11 +119,15 @@ export default function Game() {
         <BetModal open={open} setOpen={setOpen} roomID={room.roomID} userName={user.userName} />
         <StyledRollHistoryContainer>
           {room.isRolling ? (
-            'Rolling...'
+            <StyledTextMessage>Rolling...</StyledTextMessage>
           ) : (
             <>
               {rollHistory.map((roll, index) => {
-                return `${roll} -> `;
+                return (
+                  <>
+                    <StyledTextMessage>{roll + '      ->      '}</StyledTextMessage>
+                  </>
+                );
               })}
             </>
           )}
@@ -132,40 +139,46 @@ export default function Game() {
             ) : (
               ''
             )}
-            <StyledInputLabel>{players[0].playerTurn && !room.isRolling ? 'Your Turn!' : ''}</StyledInputLabel>
-            <StyledPlayerCard style={{ borderRadius: '0px', boxShadow: 'none', width: '100%' }}>
-              <StyledContainer style={{ borderRadius: '0px', boxShadow: 'none' }}>
-                <h1>{players[0].name}</h1>
-                <h2>{Number(players[0].gold)}</h2>
+            <StyledInputLabel style={{ fontSize: '10px' }}>{players[0].playerTurn && !room.isRolling ? 'Your Turn!' : ''}</StyledInputLabel>
+            <StyledPlayerCard>
+              <StyledContainer>
+                <StyledHeader style={{ fontSize: '20px' }}>{players[0].name}</StyledHeader>
+                <StyledHeader style={{ fontSize: '15px', marginBottom: '10px' }}>{Number(players[0].gold)}</StyledHeader>
               </StyledContainer>
             </StyledPlayerCard>
           </StyledPlayerContainer>
           {gameState === 'GAME_BET' ? (
             <StyledContainer style={{ borderRadius: '0px', boxShadow: 'none', width: '25%' }}>
-              <StyledButton
+              <StyledBetButton
                 onClick={() => {
                   setOpen(true);
                 }}
               >
                 Bet
-              </StyledButton>
+              </StyledBetButton>
             </StyledContainer>
           ) : (
             <StyledContainer style={{ borderRadius: '0px', boxShadow: 'none', width: '25%' }}>
               <StyledInputLabel>{room.isRolling ? '' : room.roll}</StyledInputLabel>
               {room.isRolling ? (
-                <StyledButton disabled>Rolling...</StyledButton>
+                <StyledBetButton disabled>Rolling...</StyledBetButton>
               ) : (
-                <StyledButton
+                <StyledBetButton
                   onClick={() => {
                     handleRoll();
                   }}
                   variant="contained"
-                  color="primary"
                   disabled={user.userName !== activePlayer}
+                  sx={{
+                    ml: 1,
+                    '&.MuiButtonBase-root:hover': {
+                      bgcolor: 'transparent',
+                      boxShadow: 'none',
+                    },
+                  }}
                 >
                   Roll
-                </StyledButton>
+                </StyledBetButton>
               )}
             </StyledContainer>
           )}
@@ -175,11 +188,11 @@ export default function Game() {
             ) : (
               ''
             )}
-            <StyledInputLabel>{players[1].playerTurn && !room.isRolling ? 'Your Turn!' : ''}</StyledInputLabel>
-            <StyledPlayerCard style={{ borderRadius: '0px', boxShadow: 'none', width: '100%' }}>
-              <StyledContainer style={{ borderRadius: '0px', boxShadow: 'none', width: '100%' }}>
-                <h1>{players[1].name}</h1>
-                <h2>{Number(players[1].gold)}</h2>
+            <StyledInputLabel style={{ fontSize: '10px' }}>{players[1].playerTurn && !room.isRolling ? 'Your Turn!' : ''}</StyledInputLabel>
+            <StyledPlayerCard>
+              <StyledContainer>
+                <StyledHeader style={{ fontSize: '20px' }}>{players[1].name}</StyledHeader>
+                <StyledHeader style={{ fontSize: '15px', marginBottom: '10px' }}>{Number(players[1].gold)}</StyledHeader>
               </StyledContainer>
             </StyledPlayerCard>
           </StyledPlayerContainer>
@@ -199,13 +212,13 @@ export default function Game() {
         </StyledRowContainer>
 
         <StyledChatContainer>
-          <h1>Chat</h1>
+          <StyledHeader>Chat</StyledHeader>
           <form
             onSubmit={(e) => {
               handleChatMessage(e);
             }}
           >
-            <StyledChatTextInput />
+            <StyledChatTextInput sx={{ input: { color: '#ffc700' } }} />
           </form>
         </StyledChatContainer>
       </GenericContainer>

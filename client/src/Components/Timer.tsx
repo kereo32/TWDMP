@@ -1,6 +1,8 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
+import { MessageOwner } from './styled';
+
 const Timer = (props: any) => {
   const { initialMinute = 0, initialSeconds = 0, autoRoll } = props;
   const [minutes, setMinutes] = useState(initialMinute);
@@ -28,10 +30,10 @@ const Timer = (props: any) => {
   return (
     <div>
       {minutes === 0 && seconds === 0 ? null : (
-        <h1>
+        <MessageOwner style={{ fontSize: '10px', marginRight: '-3px' }}>
           {' '}
           {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-        </h1>
+        </MessageOwner>
       )}
     </div>
   );

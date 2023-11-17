@@ -4,19 +4,9 @@ import { useEffect, Dispatch, SetStateAction } from 'react';
 import { InputLabel, TextField, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 
-import SocketService from '../services/SocketService';
+import { StyledBettingContainer, StyledBettingBackground, StyledBetButton, StyledBetButtonPressed, StyledInputLabel, StyledLoginTextField } from './styled';
 
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+import SocketService from '../services/SocketService';
 
 type BetModalProps = {
   open: boolean;
@@ -51,42 +41,77 @@ function BetModal(props: BetModalProps) {
   return (
     <div>
       <Modal open={props.open} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-        <Box sx={style}>
-          <InputLabel style={{ display: 'flex', justifyContent: 'center' }}> Place Your Bet</InputLabel>
+        <StyledBettingContainer style={{ height: '15%' }}>
+          <StyledBettingBackground />
+          <StyledInputLabel> Place Your Bet</StyledInputLabel>
           <TextField
             onChange={(e) => {
               handleChange(e);
             }}
             style={{ display: 'flex', justifyContent: 'center' }}
+            sx={{
+              input: { color: '#ffc700' },
+              '& fieldset': { borderColor: '#ffc700' },
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': {
+                  borderColor: '#ffc700',
+                },
+              },
+            }}
             type="number"
             id="outlined-basic"
-            variant="outlined"
             value={bet}
           />
 
           <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Button
-              style={players[0].playerReady ? { backgroundColor: 'green', color: 'white' } : { backgroundColor: 'red' }}
-              id="player1"
-              disabled={players[0].name !== props.userName}
-              onClick={(e) => {
-                handleClick(e);
-              }}
-            >
-              Accept
-            </Button>
-            <Button
-              style={players[1].playerReady ? { backgroundColor: 'green', color: 'white' } : { backgroundColor: 'red' }}
-              id="player2"
-              disabled={players[1].name !== props.userName}
-              onClick={(e) => {
-                handleClick(e);
-              }}
-            >
-              Accept
-            </Button>
+            {players[0].playerReady ? (
+              <StyledBetButtonPressed
+                disableRipple
+                id="player1"
+                disabled={players[0].name !== props.userName}
+                onClick={(e) => {
+                  handleClick(e);
+                }}
+              >
+                Accept
+              </StyledBetButtonPressed>
+            ) : (
+              <StyledBetButton
+                disableRipple
+                id="player1"
+                disabled={players[0].name !== props.userName}
+                onClick={(e) => {
+                  handleClick(e);
+                }}
+              >
+                Accept
+              </StyledBetButton>
+            )}
+            {players[1].playerReady ? (
+              <StyledBetButtonPressed
+                id="player2"
+                disableRipple
+                disabled={players[1].name !== props.userName}
+                onClick={(e) => {
+                  handleClick(e);
+                }}
+              >
+                Accept
+              </StyledBetButtonPressed>
+            ) : (
+              <StyledBetButton
+                id="player2"
+                disableRipple
+                disabled={players[1].name !== props.userName}
+                onClick={(e) => {
+                  handleClick(e);
+                }}
+              >
+                Accept
+              </StyledBetButton>
+            )}
           </Box>
-        </Box>
+        </StyledBettingContainer>
       </Modal>
     </div>
   );
