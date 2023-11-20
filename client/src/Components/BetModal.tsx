@@ -1,12 +1,13 @@
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import { useEffect, Dispatch, SetStateAction } from 'react';
-import { InputLabel, TextField, Button } from '@mui/material';
+import React, { useEffect, Dispatch, SetStateAction, ChangeEvent } from 'react';
+import { TextField } from '@mui/material';
 import { useSelector } from 'react-redux';
 
-import { StyledBettingContainer, StyledBettingBackground, StyledBetButton, StyledBetButtonPressed, StyledInputLabel, StyledLoginTextField } from './styled';
+import { StyledBettingContainer, StyledBettingBackground, StyledBetButton, StyledBetButtonPressed, StyledInputLabel } from './styled';
 
 import SocketService from '../services/SocketService';
+import { StoreState } from 'types';
 
 type BetModalProps = {
   open: boolean;
@@ -16,19 +17,21 @@ type BetModalProps = {
 };
 
 function BetModal(props: BetModalProps) {
-  const bet = useSelector((state) => state.room.currentBet);
-  const players = useSelector((state) => state.room.players);
+  const bet = useSelector((state: StoreState) => state.room.currentBet);
+  const players = useSelector((state: StoreState) => state.room.players);
 
-  const handleClick = (e: MouseEvent) => {
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    SocketService.emit('updatePlayerReadyStatus', { roomID: props.roomID, playerIndex: e.currentTarget.id === 'player1' ? 0 : 1, playerReady: true });
+    const target = e.currentTarget as HTMLButtonElement;
+    SocketService.emit('updatePlayerReadyStatus', { roomID: props.roomID, playerIndex: target.id === 'player1' ? 0 : 1, playerReady: true });
   };
 
-  const handleChange = (e: InputEvent) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
+    const inputElement = e.target as HTMLInputElement;
     SocketService.emit('updatePlayerReadyStatus', { roomID: props.roomID, playerIndex: 0, playerReady: false });
     SocketService.emit('updatePlayerReadyStatus', { roomID: props.roomID, playerIndex: 1, playerReady: false });
-    SocketService.emit('updateCurrentBet', { roomID: props.roomID, currentBet: parseInt(e.target.value) });
+    SocketService.emit('updateCurrentBet', { roomID: props.roomID, currentBet: parseInt(inputElement.value) });
   };
   useEffect(() => {
     if (players[0].playerReady && players[1].playerReady) {
@@ -45,7 +48,7 @@ function BetModal(props: BetModalProps) {
           <StyledBettingBackground />
           <StyledInputLabel> Place Your Bet</StyledInputLabel>
           <TextField
-            onChange={(e) => {
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
               handleChange(e);
             }}
             style={{ display: 'flex', justifyContent: 'center' }}
@@ -69,7 +72,7 @@ function BetModal(props: BetModalProps) {
                 disableRipple
                 id="player1"
                 disabled={players[0].name !== props.userName}
-                onClick={(e) => {
+                onClick={(e: React.MouseEvent<HTMLElement>) => {
                   handleClick(e);
                 }}
               >
@@ -80,7 +83,7 @@ function BetModal(props: BetModalProps) {
                 disableRipple
                 id="player1"
                 disabled={players[0].name !== props.userName}
-                onClick={(e) => {
+                onClick={(e: React.MouseEvent<HTMLElement>) => {
                   handleClick(e);
                 }}
               >
@@ -92,7 +95,7 @@ function BetModal(props: BetModalProps) {
                 id="player2"
                 disableRipple
                 disabled={players[1].name !== props.userName}
-                onClick={(e) => {
+                onClick={(e: React.MouseEvent<HTMLElement>) => {
                   handleClick(e);
                 }}
               >
@@ -103,7 +106,7 @@ function BetModal(props: BetModalProps) {
                 id="player2"
                 disableRipple
                 disabled={players[1].name !== props.userName}
-                onClick={(e) => {
+                onClick={(e: React.MouseEvent<HTMLElement>) => {
                   handleClick(e);
                 }}
               >

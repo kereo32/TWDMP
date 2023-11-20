@@ -65,7 +65,6 @@ class SocketService {
       store.dispatch(updateRoll(data));
     });
     this.socket.on('roomFull', (data) => {
-      console.log('data', data);
       store.dispatch(resetUserInformation());
       store.dispatch(updateErrorMessage(data.roomID));
     });

@@ -52,7 +52,7 @@ const roomSlice = createSlice({
     resetRollHistory(state: RoomState) {
       state.rollHistory = [];
     },
-    updateChat(state: RoomState, action: PayloadAction<{ name: string; message: string }[]>) {
+    updateChat(state: RoomState, action: PayloadAction<{ userName: string; message: string }[]>) {
       state.messages = action.payload;
     },
   },

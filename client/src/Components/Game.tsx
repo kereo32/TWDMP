@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { resetRollHistory } from '../store/room';
@@ -9,7 +9,6 @@ import {
   GenericContainer,
   StyledPlayerContainer,
   StyledInputLabel,
-  StyledButton,
   StyledRowContainer,
   StyledChatContainer,
   StyledRollHistoryContainer,
@@ -24,13 +23,14 @@ import {
   StyledHeader,
   StyledBetButton,
 } from './styled';
+import { StoreState } from 'types';
 
 export default function Game() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-  const room = useSelector((state) => state.room);
-  const messages = useSelector((state) => state.room.messages);
+  const user = useSelector((state: StoreState) => state.user);
+  const room = useSelector((state: StoreState) => state.room);
+  const messages = useSelector((state: StoreState) => state.room.messages);
 
   const { players, currentBet, gameState, rollHistory } = room;
 
@@ -122,7 +122,7 @@ export default function Game() {
             <StyledTextMessage>Rolling...</StyledTextMessage>
           ) : (
             <>
-              {rollHistory.map((roll, index) => {
+              {rollHistory.map((roll) => {
                 return (
                   <>
                     <StyledTextMessage>{roll + '      ->      '}</StyledTextMessage>

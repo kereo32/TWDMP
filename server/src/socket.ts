@@ -4,7 +4,7 @@ import { Server } from 'http';
 export default (httpServer: Server) => {
   const io: SocketIOServer = new SocketIOServer(httpServer, {
     cors: {
-      origin: 'http://localhost:5173',
+      origin: '*',
       methods: ['GET', 'POST'],
     },
   });

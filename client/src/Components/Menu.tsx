@@ -1,17 +1,9 @@
-import {
-  GenericContainer,
-  StyledLoginButton,
-  StyledLoginTextField,
-  StyledLoginInputLabel,
-  StyledButton,
-  StyledButtonContainer,
-  StyledLoginContainer,
-} from './styled';
+import { GenericContainer, StyledLoginButton, StyledLoginTextField, StyledLoginInputLabel, StyledLoginContainer } from './styled';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateErrorMessage, updateUserInformation, updateUserRoomId } from '../store/user';
 import { CircularProgress } from '@mui/material';
-import { UserState } from '../types';
+import { StoreState } from '../types';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -24,9 +16,9 @@ export default function Menu() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const userName = useSelector((state: UserState) => state.user.userName);
-  const canUserJoinRoom = useSelector((state: UserState) => state.user.canJoinRoom);
-  const user = useSelector((state: UserState) => state.user);
+  const userName = useSelector((state: StoreState) => state.user.userName);
+  const canUserJoinRoom = useSelector((state: StoreState) => state.user.canJoinRoom);
+  const user = useSelector((state: StoreState) => state.user);
 
   useEffect(() => {
     player.length > 4 ? setButtonDisabled(false) : setButtonDisabled(true);
@@ -37,7 +29,7 @@ export default function Menu() {
   }, [user, canUserJoinRoom]);
 
   const savePlayerName = () => () => {
-    dispatch(updateUserInformation({ userName: player }));
+    dispatch(updateUserInformation({ ...user, userName: player }));
   };
 
   const joinRoomOrCreateRoom = () => {

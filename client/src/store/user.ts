@@ -15,7 +15,6 @@ const userSlice = createSlice({
   reducers: {
     updateUserInformation(state: UserState, action: PayloadAction<UserState>) {
       state.userName = action.payload.userName;
-
       SocketService.emit('userJoined', { userName: state.userName });
     },
     updateUserRoomId(state: UserState, action: PayloadAction<string>) {

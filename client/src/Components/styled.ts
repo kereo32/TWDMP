@@ -1,9 +1,9 @@
-import { Container, TextField, Button, InputLabel, Box, Divider } from '@mui/material';
+import { Container, TextField, Button, InputLabel, Box } from '@mui/material';
 import { styled } from '@mui/system';
-import wowBackgroundImage from '../../public/images/wowbg.jpeg';
-import borderImage from '../../public/images/UI_BorderAtlas.png';
-import buttonBackground from '../../public/images/buttons/button_idle.png';
-import pressedButtonBackground from '../../public/images/buttons/button_pressed.png';
+import wowBackgroundImage from '/images/wowbg.jpeg';
+import borderImage from '/images/UI_BorderAtlas.png';
+import buttonBackground from '/images/buttons/button_idle.png';
+import pressedButtonBackground from '/images/buttons/button_pressed.png';
 
 // InputLabel, TextField, Button
 const GenericContainer = styled('div')({
